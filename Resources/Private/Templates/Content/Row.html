@@ -1,0 +1,80 @@
+{namespace flux=FluidTYPO3\Flux\ViewHelpers}
+{namespace v=Tx_Vhs_ViewHelpers}
+<f:layout name="Content" />
+
+<f:section name="Configuration">
+	<flux:form id="row" wizardTab="Foundation" label="Row" icon="{f:uri.resource(path: 'Icons/icon-row.gif')}">
+		<flux:field.checkbox name="equalizer" label="Equalizer" />
+		<flux:field.checkbox name="collapse" label="Collapse" />
+		<flux:form.section name="columns">
+			<flux:form.object name="column" label="Column">
+				<flux:field.select name="small" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'small'})
+				    -> v:iterator.loop(count: 12, iteration: 'iteration', minimum: 1)}" label="Small" />
+				<flux:field.select name="medium" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'medium'})
+				    -> v:iterator.loop(count: 12, iteration: 'iteration', minimum: 1)}" label="Medium" />
+				<flux:field.select name="large" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'large'})
+				    -> v:iterator.loop(count: 12, iteration: 'iteration', minimum: 1)}" label="Large" />
+				<flux:field.select name="small-offset" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'small-offset'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}" label="Small offset" />
+				<flux:field.select name="medium-offset" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'medium-offset'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}" label="Medium offset" />
+				<flux:field.select name="large-offset" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'large-offset'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}" label="Large offset" />
+				<flux:field.select name="small-push-pull" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'small-push'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}{f:render(section: 'Value', arguments: {iteration: iteration, class: 'small-pull'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}" label="Small push/pull" />
+				<flux:field.select name="medium-push-pull" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'medium-push'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}{f:render(section: 'Value', arguments: {iteration: iteration, class: 'medium-pull'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)},medium-reset-order" label="Medium push/pull" />
+				<flux:field.select name="large-push-pull" items="{f:render(section: 'Value', arguments: {iteration: iteration, class: 'large-push'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)}{f:render(section: 'Value', arguments: {iteration: iteration, class: 'large-pull'})
+				    -> v:iterator.loop(count: 11, iteration: 'iteration', minimum: 1)},large-reset-order" label="Large push/pull" />
+				<flux:field.select name="small-center" items=",small-centered" label="Small center" />
+				<flux:field.select name="medium-center" items=",medium-centered,medium-uncentered" label="Medium center" />
+				<flux:field.select name="large-center" items=",large-centered,large-uncentered" label="Large center" />
+				<flux:field.checkbox name="end" label="End" />
+				<flux:field.select name="frame" items=",panel,panel radius,panel callout,panel callout radius" label="Frame" />
+			</flux:form.object>
+		</flux:form.section>
+		<flux:grid>
+			<flux:grid.row>
+				<f:for each="{columns}" as="sectionObject" iteration="iteration">
+					<flux:grid.column>
+						<flux:form.content name="column{iteration.cycle}" label="Column {iteration.cycle}" />
+					</flux:grid.column>
+				</f:for>
+			</flux:grid.row>
+		</flux:grid>
+	</flux:form>
+</f:section>
+
+<f:section name="Preview">
+	<flux:widget.grid />
+</f:section>
+
+<f:section name="Main">
+	<div class="row {f:if(condition: collapse, then: 'collapse')}" {f:if(condition: equalizer, then: 'data-equalizer')}>
+		<f:for each="{columns}" as="sectionObject" iteration="iteration">
+			<f:if condition="sectionObject.column.frame">
+				<f:then>
+					<div class="{f:render(section: 'Classes', arguments: {obj: sectionObject})} columns">
+						<div class="{sectionObject.column.frame}" {f:if(condition: equalizer, then: 'data-equalizer-watch')}>
+							<flux:content.render area="column{iteration.cycle}" />
+						</div>
+					</div>
+				</f:then>
+				<f:else>
+					<div class="{f:render(section: 'Classes', arguments: {obj: sectionObject})} columns" {f:if(condition: equalizer, then: 'data-equalizer-watch')}>
+						<flux:content.render area="column{iteration.cycle}" />
+					</div>
+				</f:else>
+			</f:if>
+		</f:for>
+	</div>
+	<flux:content.render area="content" />
+</f:section>
+
+
+<f:section name="Value">,{class}-{iteration.cycle}</f:section>
+
+<f:section name="Classes">{obj.column.small} {obj.column.medium} {obj.column.large} {obj.column.small-offset} {obj.column.medium-offset} {obj.column.large-offset} {obj.column.small-push-pull} {obj.column.medium-push-pull} {obj.column.large-push-pull} {obj.column.small-center} {obj.column.medium-center} {obj.column.large-center} {f:if(condition: obj.column.end, then: ' end')}</f:section>

@@ -1,0 +1,54 @@
+{namespace flux=FluidTYPO3\Flux\ViewHelpers}
+<f:layout name="Content" />
+
+<f:section name="Configuration">
+	<flux:form id="tabs" wizardTab="Foundation" label="Tabs" icon="{f:uri.resource(path: 'Icons/icon-tabs.gif')}">
+		<flux:form.sheet name="display" label="Display">
+			<flux:field.checkbox name="vertical" label="Vertical" />
+			<flux:field.checkbox name="deep_linking" label="Deep linking" />
+			<flux:field.checkbox name="scroll_to_content" label="Scroll to content"/>
+		</flux:form.sheet>
+
+		<flux:form.sheet name="tabs" label="Tabs">
+			<flux:form.section name="tabs">
+				<flux:form.object name="tab" label="Tab">
+					<flux:field.input name="title" label="Title" />
+					<flux:field.checkbox name="active" label="Active" />
+				</flux:form.object>
+			</flux:form.section>
+		</flux:form.sheet>
+
+		<flux:grid>
+			<flux:grid.row>
+				<f:for each="{tabs}" as="tab" iteration="iteration">
+					<flux:grid.column >
+						<flux:form.content name="content.{iteration.index}" label="Tab {iteration.cycle}" />
+					</flux:grid.column>
+				</f:for>
+			</flux:grid.row>
+		</flux:grid>
+	</flux:form>
+</f:section>
+
+<f:section name="Preview">
+	<flux:widget.grid />
+</f:section>
+
+<f:section name="Main">
+	<ul class="tabs {f:if(condition: vertical, then: 'vertical')}" data-tab {f:if(condition: deep_linking, then: '{f:if(condition: scroll_to_content, then: \'data-options="deep_linking: true"\', else: \'data-options="deep_linking: true, scroll_to_content: false"\')}')}>
+		<f:for each="{tabs}" as="tab" iteration="iteration">
+			<li class="tab-title {f:if(condition: tab.tab.active, then: 'active')}">
+				<a href="#tab-{record.uid}-{iteration.index}">{tab.tab.title}</a>
+			</li>
+		</f:for>
+	</ul>
+
+	<div class="tabs-content {f:if(condition: vertical, then: 'vertical')}">
+		<f:for each="{tabs}" as="tab" iteration="iteration">
+			<div class="content  {f:if(condition: tab.tab.active, then: 'active')}" id="tab-{record.uid}-{iteration.index}">
+				<flux:content.render area="content.{iteration.index}" />
+			</div>
+		</f:for>
+	</div>
+
+</f:section>
