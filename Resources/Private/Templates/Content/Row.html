@@ -39,8 +39,7 @@
 		<flux:grid>
 			<flux:grid.row>
 				<f:for each="{columns}" as="sectionObject" iteration="iteration">
-					<flux:grid.column>
-						<flux:form.content name="column{iteration.cycle}" label="Column {iteration.cycle}" />
+					<flux:grid.column name="column{iteration.cycle}" label="Column {iteration.cycle}">
 					</flux:grid.column>
 				</f:for>
 			</flux:grid.row>
