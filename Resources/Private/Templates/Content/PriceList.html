@@ -1,0 +1,42 @@
+{namespace flux=FluidTYPO3\Flux\ViewHelpers}
+<f:layout name="Content" />
+
+<f:section name="Configuration">
+	<flux:form id="pricingtable" wizardTab="Foundation" label="Pricing Table" icon="{f:uri.resource(path: 'Icons/icon-pricing-table.gif')}">
+		<flux:form.sheet name="items" label="Items">
+
+			<flux:field.input name="title" label="Title" />
+			<flux:field.input name="price" label="Price" />
+			<flux:field.input name="description" label="Description" />
+
+			<flux:field.input name="button" label="Button title" />
+			<flux:field.input name="link" label="Button link" />
+
+
+
+			<flux:form.section name="items">
+				<flux:form.object name="item" label="Item">
+					<flux:field.input name="content" label="Item content" />
+				</flux:form.object>
+			</flux:form.section>
+		</flux:form.sheet>
+	</flux:form>
+</f:section>
+
+<f:section name="Preview">
+	<f:if condition="{title}"><strong>{title}</strong></f:if>
+	<f:if condition="{price}"><em>{price}</em></f:if>
+	<f:if condition="{description}"><br>{description}</f:if>
+</f:section>
+
+<f:section name="Main">
+	<ul class="pricing-table" data-accordion>
+		<f:if condition="{title}"><li class="title">{title}</li></f:if>
+		<f:if condition="{price}"><li class="price">{price}</li></f:if>
+		<f:if condition="{description}"><li class="description">{description}</li></f:if>
+		<f:for each="{items}" as="item" iteration="iteration">
+			<li class="bullet-item">{item.item.content}</li>
+		</f:for>
+		<f:if condition="{button}"><li class="cta-button"><a class="button" href="{link}">{button}</a></li></f:if>
+	</ul>
+</f:section>
